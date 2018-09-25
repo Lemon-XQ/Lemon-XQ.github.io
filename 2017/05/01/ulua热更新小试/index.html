@@ -1,0 +1,1191 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Unity,Lua,热更新," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Lemon-XQ" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="传说中的热更新在Unity中是怎样实现的:) 写在前面　　热更新技术在游戏行业可以说是大名鼎鼎了，虽然苹果前段时间禁止了JSPatch等热更新技术，但目前来看，苹果并没有禁止游戏引擎的热更新技术。某种程度上说明了热更新在游戏中的重要性。而ulua作为一款优秀的unity3d热更新插件，完美解决了Unity游戏热更新的问题。">
+<meta name="keywords" content="Unity,Lua,热更新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ulua热更新小试">
+<meta property="og:url" content="http://lemonxq.cn/2017/05/01/ulua热更新小试/index.html">
+<meta property="og:site_name" content="Lemon-XQ">
+<meta property="og:description" content="传说中的热更新在Unity中是怎样实现的:) 写在前面　　热更新技术在游戏行业可以说是大名鼎鼎了，虽然苹果前段时间禁止了JSPatch等热更新技术，但目前来看，苹果并没有禁止游戏引擎的热更新技术。某种程度上说明了热更新在游戏中的重要性。而ulua作为一款优秀的unity3d热更新插件，完美解决了Unity游戏热更新的问题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://okwl1c157.bkt.clouddn.com/panelDemo">
+<meta property="og:updated_time" content="2018-09-25T02:04:21.720Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ulua热更新小试">
+<meta name="twitter:description" content="传说中的热更新在Unity中是怎样实现的:) 写在前面　　热更新技术在游戏行业可以说是大名鼎鼎了，虽然苹果前段时间禁止了JSPatch等热更新技术，但目前来看，苹果并没有禁止游戏引擎的热更新技术。某种程度上说明了热更新在游戏中的重要性。而ulua作为一款优秀的unity3d热更新插件，完美解决了Unity游戏热更新的问题。">
+<meta name="twitter:image" content="http://okwl1c157.bkt.clouddn.com/panelDemo">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lemonxq.cn/2017/05/01/ulua热更新小试/"/>
+
+
+
+
+
+  <title>
+   ulua热更新小试 | Lemon-XQ 
+  </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s4.cnzz.com/z_stat.php?id=1261194950&web_id=1261194950" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lemon-XQ</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <h1 class="site-subtitle" itemprop="description">Stay Hungry, Stay Foolish</h1>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://lemonxq.cn/2017/05/01/ulua热更新小试/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Lemon-XQ">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lemon-XQ">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lemon-XQ" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                ulua热更新小试
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-01T22:50:09+08:00">
+                2017-05-01
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-25T10:04:21+08:00">
+                2018-09-25
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index">
+                    <span itemprop="name">Unity</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/05/01/ulua热更新小试/" class="leancloud_visitors" data-flag-title="ulua热更新小试">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><blockquote class="blockquote-center">传说中的热更新在Unity中是怎样实现的:)</blockquote></p>
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>　　热更新技术在游戏行业可以说是大名鼎鼎了，虽然苹果前段时间禁止了JSPatch等热更新技术，但目前来看，苹果并没有禁止游戏引擎的热更新技术。某种程度上说明了热更新在游戏中的重要性。而ulua作为一款优秀的unity3d热更新插件，完美解决了Unity游戏热更新的问题。<br><a id="more"></a></p>
+<h2 id="什么是热更新"><a href="#什么是热更新" class="headerlink" title="什么是热更新"></a>什么是热更新</h2><p>　　热更新一般用于网络游戏中。其指的是在不重新下载客户端的情况下，对游戏的内容进行更新（包括资源更新或逻辑更新等）。知乎上对热更新有一个很形象的比喻：假设你的卡车开到了150KM/H，然后有个轮胎爆了。司机说，你就直接换吧，我不停车。你小心点换。热更新机制大概就是这个意思。</p>
+<h2 id="什么是Lua"><a href="#什么是Lua" class="headerlink" title="什么是Lua"></a>什么是Lua</h2><p>　　Lua是一款<strong>轻巧</strong>的脚本语言，由<strong>标准C</strong>编写而成，代码简洁优美，几乎在所有操作系统和平台上都可以编译，运行。在目前所有脚本引擎中，Lua的<strong>速度是最快</strong>的。这一切都决定了Lua是作为<strong>嵌入式脚本</strong>的最佳选择。（嗯这段其实是百度的orz…）</p>
+<p>　　Lua代码都是运行时才编译的，不运行的时候就如同一张图片、一段音频一样，都是文件；所以更新逻辑只需要更新脚本，不需要再编译，因而Lua能轻松实现“热更新”。Ulua是一款非常实用的unity插件，它能让unity支持Lua语言，而且运行效率还不错。</p>
+<h2 id="使用ulua进行热更新"><a href="#使用ulua进行热更新" class="headerlink" title="使用ulua进行热更新"></a>使用ulua进行热更新</h2><h3 id="1-安装ulua插件-及-Lua编写工具LuaStudio"><a href="#1-安装ulua插件-及-Lua编写工具LuaStudio" class="headerlink" title="1.安装ulua插件 及 Lua编写工具LuaStudio"></a>1.安装ulua插件 及 Lua编写工具LuaStudio</h3><ul>
+<li>ulua下载地址：<a href="http://ulua.org/" target="_blank" rel="noopener">http://ulua.org/</a></li>
+<li>LuaStudio下载地址：<a href="https://pan.baidu.com/s/1hsabx0w" target="_blank" rel="noopener">https://pan.baidu.com/s/1hsabx0w</a> 密码: kqvp</li>
+</ul>
+<h3 id="2-新建Unity工程，将ulua导入工程中"><a href="#2-新建Unity工程，将ulua导入工程中" class="headerlink" title="2.新建Unity工程，将ulua导入工程中"></a>2.新建Unity工程，将ulua导入工程中</h3><h3 id="3-ulua中的使用流程"><a href="#3-ulua中的使用流程" class="headerlink" title="3.ulua中的使用流程"></a>3.ulua中的使用流程</h3><ul>
+<li>实例化LuaState对象（new LuaState()）,一个LuaState对象代表一个Lua解释器</li>
+<li>加载Lua代码（LuaState.DoString(string)），string为Lua代码字符串或Lua脚本文件名称<strong>（推荐使用后者）</strong></li>
+<li>调用Lua代码中的方法（GetFunction string）,LuaFunction.callFunction(string)</li>
+<li><strong>注：</strong>由于Unity不支持扩展名为lua的文件，所以可将Lua脚本扩展名定为txt（纯文本文件）,并用unity的<strong>TextAsset</strong>列表负责记录所有脚本文件。建议列表中给每个脚本搭配一个string类型的ID，这样凭此ID即可加载正确的lua脚本；另外在LuaState类中新增一个String类型的public成员，赋值为该ID。这样一旦某个Lua脚本在运行时报错，可根据输出的ID值判断是哪个Lua脚本有错误。</li>
+</ul>
+<h3 id="4-ulua框架在Unity中的使用（SimpleFramework-UGUI解读）"><a href="#4-ulua框架在Unity中的使用（SimpleFramework-UGUI解读）" class="headerlink" title="4.ulua框架在Unity中的使用（SimpleFramework_UGUI解读）"></a>4.ulua框架在Unity中的使用（SimpleFramework_UGUI解读）</h3><ul>
+<li><strong>框架启动</strong><ul>
+<li>GlobalGenerator:初始化游戏环境,包括添加AppView,启动<strong>pureMVC</strong>框架，添加各种Manager</li>
+<li>GameManager中对资源进行更新处理</li>
+</ul>
+</li>
+<li><strong>资源初始化过程 </strong>OnResourceInited<ul>
+<li>加载网络、游戏管理器的Lua脚本</li>
+<li>调用GameManager.lua里的LuaScriptPanel方法（CallMethod通过LuaScriptMgr.cs的CallLuaFunction()将控制权移交给GameManager.lua）</li>
+<li>创建Lua面板（Message、Prompt）</li>
+<li>调用方法OnInitOK表示初始化成功</li>
+</ul>
+</li>
+<li>ulua框架的执行顺序：<ul>
+<li>每个UI Panel对应<strong>View</strong>下的lua代码，用来获取一些需要交互的属性</li>
+<li>每个UIprefab通过<strong>Controller</strong>进行控制，包括其实例化以及组件的一些行为，比如OnCreate事件</li>
+</ul>
+</li>
+</ul>
+<h2 id="热更新案例：UI面板更新"><a href="#热更新案例：UI面板更新" class="headerlink" title="热更新案例：UI面板更新"></a>热更新案例：UI面板更新</h2><h3 id="创建开发UI界面"><a href="#创建开发UI界面" class="headerlink" title="创建开发UI界面"></a>创建开发UI界面</h3><ul>
+<li>设计UI Panel<br><img src="http://okwl1c157.bkt.clouddn.com/panelDemo" alt=""></li>
+<li>将UI panel做成prefab,进行<strong>打包</strong>（注意<strong>后缀一定为.assetbundle</strong>）</li>
+<li>将UI panel所用到的所有UI资源进行打包（图片、字体等），最好分类打包</li>
+<li>点击<strong>Game-Build XXX Resources</strong>(XXX 代表想要发布到的平台)</li>
+<li>创建<strong>Global Generator</strong>（空Object上挂Global Generator脚本）</li>
+<li>重写Logic文件夹中的<strong>GameManager.lua</strong>脚本<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span> <span class="string">"Common/define"</span> <span class="comment">--引入AppConst,NetManager的定义</span></span><br><span class="line"><span class="built_in">require</span> <span class="string">"Controller/BottomCtrl"</span> <span class="comment">--以下引入对各子面板的控制器</span></span><br><span class="line"><span class="built_in">require</span> <span class="string">"Controller/SettingsCtrl"</span></span><br><span class="line"><span class="built_in">require</span> <span class="string">"Controller/DialogCtrl"</span></span><br><span class="line"></span><br><span class="line">GameManager = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GameManager.LuaScriptPanel</span><span class="params">()</span></span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">'Bottom'</span>,<span class="string">'Settings'</span>,<span class="string">'Dialog'</span>; <span class="comment">--Prefab中除掉“Panel”后的名字</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GameManager.OnInitOK</span><span class="params">()</span></span></span><br><span class="line">	<span class="comment">--加载网络</span></span><br><span class="line">	AppConst.SocketPort = <span class="number">2012</span>; <span class="comment">--设置套接字端口号</span></span><br><span class="line">    AppConst.SocketAddress = <span class="string">"127.0.0.1"</span>; <span class="comment">--设置套接字IP地址，这里默认从主机下载资源</span></span><br><span class="line">    NetManager:SendConnect(); <span class="comment">--建立连接</span></span><br><span class="line">	</span><br><span class="line">	BottomCtrl.Awake();</span><br><span class="line">	SettingsCtrl.Awake();</span><br><span class="line">	DialogCtrl.Awake();</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>View文件夹下<strong>创建子面板的lua脚本</strong>（以BottomPanel.lua为例，其他同理）<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">BottomPanel = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> this = BottomPanel</span><br><span class="line"><span class="keyword">local</span> gameObject</span><br><span class="line"><span class="keyword">local</span> transform</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomPanel.Awake</span><span class="params">(obj)</span></span></span><br><span class="line">	<span class="comment">--对局部变量进行赋值</span></span><br><span class="line">	gameObject = obj;</span><br><span class="line">	transform = gameObject.transform</span><br><span class="line">	</span><br><span class="line">	this.InitPanel();<span class="comment">--初始化面板</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomPanel.InitPanel</span><span class="params">()</span></span></span><br><span class="line">	<span class="comment">--给面板中的三个Button赋值</span></span><br><span class="line">	this.buttonSettings = transform:FindChild(<span class="string">"ButtonSetting"</span>).gameObject;</span><br><span class="line">	this.buttonPeople = transform:FindChild(<span class="string">"ButtonPeople"</span>).gameObject;</span><br><span class="line">	this.buttonDialog = transform:FindChild(<span class="string">"ButtonDialog"</span>).gameObject;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li><strong>[可选]</strong>给SettingPanel下的BG添加动画：由小变大动画、隐藏动画、激活动画</li>
+<li>重写SettingPanel.lua脚本获取UI中的组件<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">SettingsPanel = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> this = SettingsPanel</span><br><span class="line"><span class="keyword">local</span> transform</span><br><span class="line"><span class="keyword">local</span> gameObject</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SettingsPanel.Awake</span><span class="params">(obj)</span></span></span><br><span class="line">	gameObject = obj;</span><br><span class="line">	transform = gameObject.transform;</span><br><span class="line">	</span><br><span class="line">    this.InitPanel();</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SettingsPanel.InitPanel</span><span class="params">()</span></span></span><br><span class="line">	<span class="comment">--获取动画组件及按钮组件</span></span><br><span class="line">	this.anim = transform:FindChild(<span class="string">"Bg"</span>):GetComponent(<span class="string">"Animator"</span>);</span><br><span class="line">	this.buttonClose = transform:FindChild(<span class="string">"Bg/ButtonClose"</span>).gameObject;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>开发Controller控制层下的Lua代码，控制UI控件的产生和事件的监听（以BottomCtrl.lua为例）<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span> <span class="string">"Common/define"</span></span><br><span class="line"></span><br><span class="line">BottomCtrl = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> this = BottomCtrl</span><br><span class="line"><span class="keyword">local</span> gameObject</span><br><span class="line"><span class="keyword">local</span> transform</span><br><span class="line"><span class="keyword">local</span> lua</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomCtrl.New</span><span class="params">()</span></span></span><br><span class="line">	<span class="keyword">return</span> this;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomCtrl.Awake</span><span class="params">()</span></span></span><br><span class="line">	<span class="comment">--调用panel的创建方法创建相应面板，注意面板命名为XXPanel</span></span><br><span class="line">	PanelManager:CreatePanel(<span class="string">"Bottom"</span>,this.OnCreate)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomCtrl.OnCreate</span><span class="params">(obj)</span></span></span><br><span class="line">	gameObject = obj;</span><br><span class="line">	transform = obj.transform</span><br><span class="line">	</span><br><span class="line">	lua = gameObject:GetComponent(<span class="string">"LuaBehaviour"</span>);</span><br><span class="line">	<span class="comment">--注册按钮，绑定事件</span></span><br><span class="line">	lua:AddClick(BottomPanel.buttonDialog,this.OnButtonDialogClick);</span><br><span class="line">	lua:AddClick(BottomPanel.buttonPeople,this.OnButtonPeopleClick);</span><br><span class="line">	lua:AddClick(BottomPanel.buttonSettings,this.OnButtonSettingsClick);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomCtrl.OnButtonDialogClick</span><span class="params">()</span></span></span><br><span class="line">	DialogCtrl.Show();</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomCtrl.OnButtonPeopleClick</span><span class="params">()</span></span></span><br><span class="line">	</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BottomCtrl.OnButtonSettingsClick</span><span class="params">()</span></span></span><br><span class="line">	SettingsCtrl.Show();</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></li>
+<li>发布到手机上，启动Server<ul>
+<li>Switch Platform - Android</li>
+<li>Lua-Clear Wrap Files</li>
+<li>Lua-Gen Wrap Files</li>
+<li>Game-Build Android Resources</li>
+<li>修改AppConst.cs里的UpdateMode=true,DebugMode=false,WebUrl=局域网地址（有服务器的话就是服务器地址,这里假设用uLua自带服务器运行）</li>
+<li>打开Server.sln-HttpServer.cs，修改host,重新生成工程</li>
+<li>运行ulua文件夹下Server/Server/bin/Debug/SuperSocket.SocketService.exe（以管理员权限运行），选择r运行服务器</li>
+</ul>
+</li>
+<li>进行Lua代码的更新<ul>
+<li>Build &amp; run,手机连电脑，将程序发布到手机</li>
+<li>更改Lua代码</li>
+<li>重新Build Android Resources</li>
+<li>手机重新启动该程序</li>
+<li>解包完成！更新完成！</li>
+</ul>
+</li>
+<li>进行UI资源的更新<ul>
+<li>创建Dialog Panel,打包，新建Panel,Ctrl脚本文件</li>
+<li>重新Build Android Resources</li>
+<li>手机重新启动软件<br><strong>注意：</strong>如果电脑防火墙没关，手机是没有权限访问电脑的，就会更新失败。。。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Unity3D中的热更新"><a href="#Unity3D中的热更新" class="headerlink" title="Unity3D中的热更新"></a>Unity3D中的热更新</h2><p>Unity3D的热更新会涉及3个目录。</p>
+<ul>
+<li><p><strong>游戏资源目录：</strong>里面包含Unity3D工程中StreamingAssets文件夹下的文件。安装游戏之后，这些文件将会被一字不差地复制到目标机器上的特定文件夹里，不同平台的文件夹不同，如下所示</p>
+<ul>
+<li>Mac OS或Windows：Application.dataPath “/StreamingAssets”;</li>
+<li>IOS： Application.dataPath “/Raw”;</li>
+<li>Android：jar:file://“ Application.dataPath “!/assets/“; </li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>数据目录：</strong>由于“游戏资源目录”在Android和IOS上是只读的，不能把网上的下载的资源放到里面，所以需要建立一个“数据目录”，该目录可读可写。第一次开启游戏后，程序将“游戏资源目录”的内容复制到“数据目录中”（这个步骤只会执行一次，下次再打开游戏就不复制了）。游戏过程中的资源加载，都是从“数据目录”中获取、解包。不同平台下，“数据目录”的地址也不同，LuaFramework的定义如下：</p>
+<ul>
+<li>Android或IOS：Application.persistentDataPath “/LuaFramework”</li>
+<li>Mac OS或Windows：c:/LuaFramework/</li>
+<li>调试模式下：Application.dataPath “/StreamingAssets/“ </li>
+</ul>
+</li>
+</ul>
+<p>　　<strong>注：</strong>”LuaFramework”和”StreamingAssets”由配置决定，这里取默认值</p>
+<ul>
+<li><strong>网络资源地址：</strong>存放游戏资源的网址，游戏开启后，程序会从网络资源地址下载一些更新的文件到数据目录。</li>
+</ul>
+<p>这些目录包含着不同版本的资源文件，以及用于版本控制的<strong>files.txt。</strong>Files.txt里面存放着资源文件的名称和md5码。程序会<strong>先下载“网络资源地址”上的files.txt</strong>，然后与“数据目录”中文件的<strong>md5码</strong>做比较，更新有变化的文件。</p>
+<h2 id="常见问题-amp-amp-注意事项"><a href="#常见问题-amp-amp-注意事项" class="headerlink" title="常见问题 &amp;&amp; 注意事项"></a>常见问题 &amp;&amp; 注意事项</h2><ol>
+<li>运行 LuaStudio 时，请使用Administrator管理员权限！</li>
+<li>Lua需要统一的UTF-8编码，有时候Lua脚本无故编译出错请检查编码问题！</li>
+<li>若运行到真机，记得一定要设置Const.DebugMode=false</li>
+<li>【该点摘录自云风博客】<strong>更新时要保护后内存中的非代码数据。</strong>这个时候，<strong>对 local 变量的使用务必小心</strong>。因为 local 变量总会被作为 upvalue 绑定在 closure 里。我们的代码经常会依赖这些 local 变量。在更新后，许多保存数据用的 local 变量会生成新的一份。这很可能丢失重要数据。而因为这个问题回避使用 local 也是不合适的。要知道 local 和 global 变量的性能可不只差上一点半点。<br>我采用的方法是，<strong>把数据记录在专用的全局表下，并用 local 去引用它。初始化这些数据的时候，首先应该检查他们是否被初始化过了。这样来保证数据不被更新过程重置</strong></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="http://okwl1c157.bkt.clouddn.com/wechat-qcode.jpg" alt="Lemon-XQ wechat" style="width: 200px; max-width: 100%;"/>
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Unity/" rel="tag"># Unity</a>
+          
+            <a href="/tags/Lua/" rel="tag"># Lua</a>
+          
+            <a href="/tags/热更新/" rel="tag"># 热更新</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/20/Unity中脚本的生命周期详解/" rel="next" title="Unity中脚本的生命周期详解">
+                <i class="fa fa-chevron-left"></i> Unity中脚本的生命周期详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/13/Unity对象池技术（原理-实战）/" rel="prev" title="Unity对象池技术（原理+实战）">
+                Unity对象池技术（原理+实战） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTg5Ni84NDYw"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Lemon-XQ" />
+          <p class="site-author-name" itemprop="name">Lemon-XQ</p>
+          <p class="site-description motion-element" itemprop="description">银河街角，时光路口</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Lemon-XQ" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/lemonxq" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-gear"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.imooc.com" title="慕课网" target="_blank">慕课网</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是热更新"><span class="nav-number">2.</span> <span class="nav-text">什么是热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Lua"><span class="nav-number">3.</span> <span class="nav-text">什么是Lua</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用ulua进行热更新"><span class="nav-number">4.</span> <span class="nav-text">使用ulua进行热更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安装ulua插件-及-Lua编写工具LuaStudio"><span class="nav-number">4.1.</span> <span class="nav-text">1.安装ulua插件 及 Lua编写工具LuaStudio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-新建Unity工程，将ulua导入工程中"><span class="nav-number">4.2.</span> <span class="nav-text">2.新建Unity工程，将ulua导入工程中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ulua中的使用流程"><span class="nav-number">4.3.</span> <span class="nav-text">3.ulua中的使用流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-ulua框架在Unity中的使用（SimpleFramework-UGUI解读）"><span class="nav-number">4.4.</span> <span class="nav-text">4.ulua框架在Unity中的使用（SimpleFramework_UGUI解读）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#热更新案例：UI面板更新"><span class="nav-number">5.</span> <span class="nav-text">热更新案例：UI面板更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建开发UI界面"><span class="nav-number">5.1.</span> <span class="nav-text">创建开发UI界面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity3D中的热更新"><span class="nav-number">6.</span> <span class="nav-text">Unity3D中的热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题-amp-amp-注意事项"><span class="nav-number">7.</span> <span class="nav-text">常见问题 &amp;&amp; 注意事项</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿
+<div class="copyright" >
+  
+  &copy; 
+   
+	2017 - 
+  
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lemon-XQ
+  
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <script src="https://s4.cnzz.com/z_stat.php?id=1261194950&web_id=1261194950" language="JavaScript"></script>
+  
+  &nbsp;&nbsp;|&nbsp;&nbsp;<span><a href="/sitemap.xml">Google网站地图</a></span>
+  &nbsp;&nbsp;|&nbsp;&nbsp;<span><a href="/baidusitemap.xml">百度网站地图</a></span>
+  &nbsp;&nbsp;|&nbsp;&nbsp;<span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+  
+  </span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a> 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位访客
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+        
+
+<div class="busuanzi-count">
+
+  <script async src="/js/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("yUseF1bvQMjAV2WF8ebTj9jo-gzGzoHsz", "iWQEqzWeV07HMMiQNxidfuqH");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+  
+	<script type="text/javascript" 
+	color="0,0,255" opacity='0.5' zIndex="-1" count="100" 
+	src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>

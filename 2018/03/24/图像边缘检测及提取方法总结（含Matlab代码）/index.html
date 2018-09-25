@@ -1,0 +1,1181 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Matlab,机器学习," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Lemon-XQ" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="写在前面　　呼~最近开始入坑图像+机器学习了，学习的过程中遇到了不少不懂的东西，好在自学能力还可以（自恋中= =），所以断断续续也算学会了一些东西~因为这段时间一直在做边缘检测和提取的工作，所以本篇就总结一下一些常见的边缘检测方法，篇幅较长，可按点查看~">
+<meta name="keywords" content="Matlab,机器学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像边缘检测及提取方法总结（含Matlab代码）">
+<meta property="og:url" content="http://lemonxq.cn/2018/03/24/图像边缘检测及提取方法总结（含Matlab代码）/index.html">
+<meta property="og:site_name" content="Lemon-XQ">
+<meta property="og:description" content="写在前面　　呼~最近开始入坑图像+机器学习了，学习的过程中遇到了不少不懂的东西，好在自学能力还可以（自恋中= =），所以断断续续也算学会了一些东西~因为这段时间一直在做边缘检测和提取的工作，所以本篇就总结一下一些常见的边缘检测方法，篇幅较长，可按点查看~">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://img.blog.csdn.net/20170104082145549">
+<meta property="og:image" content="http://img.blog.csdn.net/20170104083209100">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_13191191580BUw.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_131911920906FX.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_1319119291xBLz.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_1319118788tu9f.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_1319118857NQ6k.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_1319118933e59W.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_1319119015UX8D.gif">
+<meta property="og:image" content="http://hi.csdn.net/attachment/201110/20/0_1319119083ivVZ.gif">
+<meta property="og:image" content="http://my.csdn.net/uploads/201205/30/1338365238_1668.jpg">
+<meta property="og:image" content="http://my.csdn.net/uploads/201205/30/1338365512_2777.jpg">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/340413/201304/11220012-dfd2500ffeab46deb94c565cbd543cd7.png">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/340413/201304/11220100-aacb4d9efd5847aea09c0010d246aaa9.png">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/340413/201304/11215427-715349a8c1aa4a138daa0a8333ae86a8.png">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/340413/201304/11215631-d4862108572245a783a3225e84036ad0.png">
+<meta property="og:image" content="http://img.blog.csdn.net/20160816201200204">
+<meta property="og:image" content="http://my.csdn.net/uploads/201206/04/1338798979_5003.JPG">
+<meta property="og:updated_time" content="2018-09-25T02:04:21.720Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图像边缘检测及提取方法总结（含Matlab代码）">
+<meta name="twitter:description" content="写在前面　　呼~最近开始入坑图像+机器学习了，学习的过程中遇到了不少不懂的东西，好在自学能力还可以（自恋中= =），所以断断续续也算学会了一些东西~因为这段时间一直在做边缘检测和提取的工作，所以本篇就总结一下一些常见的边缘检测方法，篇幅较长，可按点查看~">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170104082145549">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lemonxq.cn/2018/03/24/图像边缘检测及提取方法总结（含Matlab代码）/"/>
+
+
+
+
+
+  <title>
+   图像边缘检测及提取方法总结（含Matlab代码） | Lemon-XQ 
+  </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s4.cnzz.com/z_stat.php?id=1261194950&web_id=1261194950" language="JavaScript"></script>
+  </div>
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lemon-XQ</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <h1 class="site-subtitle" itemprop="description">Stay Hungry, Stay Foolish</h1>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://lemonxq.cn/2018/03/24/图像边缘检测及提取方法总结（含Matlab代码）/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Lemon-XQ">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Lemon-XQ">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Lemon-XQ" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+            
+            
+              
+                图像边缘检测及提取方法总结（含Matlab代码）
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-24T20:40:21+08:00">
+                2018-03-24
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-09-25T10:04:21+08:00">
+                2018-09-25
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/图像处理/" itemprop="url" rel="index">
+                    <span itemprop="name">图像处理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/03/24/图像边缘检测及提取方法总结（含Matlab代码）/" class="leancloud_visitors" data-flag-title="图像边缘检测及提取方法总结（含Matlab代码）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>　　呼~最近开始入坑图像+机器学习了，学习的过程中遇到了不少不懂的东西，好在自学能力还可以（自恋中= =），所以断断续续也算学会了一些东西~因为这段时间一直在做边缘检测和提取的工作，所以本篇就总结一下一些常见的边缘检测方法，篇幅较长，可按点查看~<br><a id="more"></a></p>
+<h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><p>　　图像处理中经常用到一些名词，以下列举一些：</p>
+<h3 id="1-滤波"><a href="#1-滤波" class="headerlink" title="1. 滤波"></a>1. 滤波</h3><p>　　所谓滤波就是对每个像素点及其邻域点的灰度值按照一定的参数规则进行加权平均，这样可以有效滤去理想图像中叠加的高频噪声。常用的滤波有线性滤波、中值滤波、均值滤波、双边滤波、高斯滤波等。滤波有抑制噪声的作用，但这会使得图像边缘模糊。</p>
+<h3 id="2-直方图"><a href="#2-直方图" class="headerlink" title="2. 直方图"></a>2. 直方图</h3><p>　　在图像处理中，经常用到直方图，如颜色直方图、灰度直方图等。直方图可以直观展现数据分布情况，如灰度直方图中，横坐标为各个灰度范围，纵坐标为处在相应范围的像素数。图像直方图不关心像素所处的空间位置，因此不受图像旋转和平移变化的影响，可以作为图像的特征。</p>
+<h3 id="3-上采样"><a href="#3-上采样" class="headerlink" title="3. 上采样"></a>3. 上采样</h3><p> 　　上采样即放大图像（或称图像插值（interpolating））,从而使图像可以显示在更高分辨率的显示设备上。注意对图像的缩放操作通常会影响图像的质量。上采样几乎都是采用<strong>内插值</strong>方法，即在原有图像像素的基础上在像素点之间采用合适的插值算法插入新的元素。    </p>
+<h3 id="4-下采样"><a href="#4-下采样" class="headerlink" title="4. 下采样"></a>4. 下采样</h3><p>　　下采样即缩小图像（或称为降采样（downsampled）），其主要目的有两个：1、使得图像符合显示区域的大小；2、生成对应图像的缩略图。</p>
+<p>　　<strong>下采样原理</strong>：对于一幅图像I尺寸为M*N，对其进行s倍下采样，即得到(M/s)*(N/s)尺寸的分辨率图像，当然s应该是M和N的公约数才行，如果考虑的是矩阵形式的图像，就是把原始图像s*s窗口内的图像变成一个像素，这个像素点的值就是窗口内所有像素的均值</p>
+<h2 id="Canny算子"><a href="#Canny算子" class="headerlink" title="Canny算子"></a>Canny算子</h2><h3 id="1-原理"><a href="#1-原理" class="headerlink" title="1.原理"></a>1.原理</h3><p>　　canny算子与LoG算子类似，属于先平滑后求导数的方法，原理可分成下面4个部分：</p>
+<h4 id="1-1-高斯滤波"><a href="#1-1-高斯滤波" class="headerlink" title="1.1 高斯滤波"></a>1.1 高斯滤波</h4><p>　　在所有滤波方法中，需要考虑的最重要的一点是如何平衡去噪与边缘检测精确之间的矛盾。实际工程经验表明，高斯函数确定的核可以提供较好的折衷方案。</p>
+<p>　　高斯滤波实现方法有两种：<strong>离散化窗口滑动卷积、傅里叶变换</strong>。因前者比较常用，故下面只介绍前者。</p>
+<p>　　离散化窗口滑动卷积主要利用高斯核实现，即一个奇数大小的高斯模板。常用的高斯核模板有3*3 和 5*5两种<br>　　<br><img src="http://img.blog.csdn.net/20170104082145549" alt=""></p>
+<p>其中的参数通过高斯函数计算，x^2+y^2表示像素点和中心像素点的距离，sigma表示标准差。</p>
+<p><img src="http://img.blog.csdn.net/20170104083209100" alt=""></p>
+<ul>
+<li><strong>注：</strong><ul>
+<li>sigma如果选的过大，会加深滤波程度，从而导致图像边缘模糊，不利于下一步的边缘检测，如果过小，则滤波效果不佳</li>
+<li>计算高斯模板参数时，需要归一化处理，对于归一化的原因，有一种解释是：归一化之后，通过卷积计算出来的模板中心像素被限制到了0-255的灰度区间中。假若某一邻域内所有像素的灰度值为255，利用该模板进行卷积之后，求得的模板中心像素灰度值仍然为255；假若计算出来的高斯模板参数之和小于1，那么通过该模板进行卷积之后，模板中心像素的灰度值将小于255，偏离了实际的灰度值，产生了误差。</li>
+</ul>
+</li>
+</ul>
+<h4 id="1-2-求梯度幅值和梯度方向"><a href="#1-2-求梯度幅值和梯度方向" class="headerlink" title="1.2 求梯度幅值和梯度方向"></a>1.2 求梯度幅值和梯度方向</h4><p>　　canny算子使用的卷积算子如下：</p>
+<p><img src="http://hi.csdn.net/attachment/201110/20/0_13191191580BUw.gif" alt=""></p>
+<p>　　梯度幅值及梯度方向的计算如下，其中P表示x方向一阶偏导数矩阵，Q表示y方向一阶偏导数矩阵，M表示梯度幅值，θ表示梯度方向</p>
+<p><img src="http://hi.csdn.net/attachment/201110/20/0_131911920906FX.gif" alt=""></p>
+<h4 id="1-3-非极大值抑制"><a href="#1-3-非极大值抑制" class="headerlink" title="1.3 非极大值抑制"></a>1.3 非极大值抑制</h4><p>　　在上面求出的梯度幅值矩阵中，值越大的元素代表其梯度越大，但它不一定是边缘像素，因此需要进行非极大值抑制，也就是寻找像素点局部最大值，将非极大值点所对应的灰度值置为0，这样可以剔除掉一大部分非边缘的点。<br>　　<img src="http://hi.csdn.net/attachment/201110/20/0_1319119291xBLz.gif" alt=""></p>
+<p>　　如上图，判定C点是否为8邻域内最大梯度值点，只需要判断C是否比C的梯度方向上dTmp1和dTmp2点大，是则保留，不是则将C点灰度值置0。而dTmp1和dTmp2的梯度值可以通过插值得到。</p>
+<h4 id="1-4-双阈值法闭合边缘"><a href="#1-4-双阈值法闭合边缘" class="headerlink" title="1.4 双阈值法闭合边缘"></a>1.4 双阈值法闭合边缘</h4><p>　　上面得到的边缘有些为假边缘，且有边缘断裂的问题，如果根据高阈值得到一个边缘图像，这样一个图像含有很少的假边缘，但是由于阈值较高，产生的图像边缘可能不闭合，因此还要采用一个低阈值，当到达轮廓的端点时，在断点的8邻域点中寻找满足低阈值的点，再根据此点收集新的边缘，直到整个图像边缘闭合。</p>
+<h3 id="2-实现"><a href="#2-实现" class="headerlink" title="2.实现"></a>2.实现</h3><h4 id="2-1-原始图像灰度化"><a href="#2-1-原始图像灰度化" class="headerlink" title="2.1 原始图像灰度化"></a>2.1 原始图像灰度化</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">img = imread(<span class="string">'lena.jpg'</span>);</span><br><span class="line">img = rgb2gray(img);</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-调用matlab内置函数"><a href="#2-2-调用matlab内置函数" class="headerlink" title="2.2 调用matlab内置函数"></a>2.2 调用matlab内置函数</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">img_edge = edge(img,<span class="string">'canny'</span>);</span><br><span class="line">figure;imshow(img_edge);title(<span class="string">'canny'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="Roberts、Sobel、Prewitt算子"><a href="#Roberts、Sobel、Prewitt算子" class="headerlink" title="Roberts、Sobel、Prewitt算子"></a>Roberts、Sobel、Prewitt算子</h2><p>图像的灰度值梯度可以用一阶偏导的有限差分近似计算，常用梯度算子有：</p>
+<h3 id="Roberts算子"><a href="#Roberts算子" class="headerlink" title="Roberts算子"></a>Roberts算子</h3><p><img src="http://hi.csdn.net/attachment/201110/20/0_1319118788tu9f.gif" alt=""></p>
+<p>梯度幅值为：<br><img src="http://hi.csdn.net/attachment/201110/20/0_1319118857NQ6k.gif" alt=""></p>
+<p><strong>matlab中可直接调用</strong>：<code>edge(img,&#39;roberts&#39;)</code></p>
+<h3 id="Sobel算子"><a href="#Sobel算子" class="headerlink" title="Sobel算子"></a>Sobel算子</h3><p><img src="http://hi.csdn.net/attachment/201110/20/0_1319118933e59W.gif" alt=""></p>
+<p>梯度幅值为：<br><img src="http://hi.csdn.net/attachment/201110/20/0_1319119015UX8D.gif" alt=""></p>
+<p><strong>matlab中可直接调用</strong>：<code>edge(img,&#39;sobel&#39;)</code></p>
+<h3 id="Prewitt算子"><a href="#Prewitt算子" class="headerlink" title="Prewitt算子"></a>Prewitt算子</h3><p><img src="http://hi.csdn.net/attachment/201110/20/0_1319119083ivVZ.gif" alt=""></p>
+<p><strong>matlab中可直接调用</strong>：<code>edge(img,&#39;prewitt&#39;)</code></p>
+<h2 id="双边滤波（Bilateral-Filters）"><a href="#双边滤波（Bilateral-Filters）" class="headerlink" title="双边滤波（Bilateral Filters）"></a>双边滤波（Bilateral Filters）</h2><h3 id="1-原理-1"><a href="#1-原理-1" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>　　传统滤波方法多多少少会有模糊边缘的缺点，而双边滤波作为一种非线性滤波器，具有在降噪平滑的同时，保持边缘的效果。该特性主要是通过在卷积的过程中组合空域(space)函数和值域(range)核函数来实现的，空域指的是像素的欧氏距离，值域指的是像素范围域中的辐射差异（如卷积核中像素与中心像素之间相似程度、颜色强度，深度距离等）。典型的核函数为高斯分布函数，如下所示：<br><img src="http://my.csdn.net/uploads/201205/30/1338365238_1668.jpg" alt=""></p>
+<p>其中，权重系数w(i,j,k,l)取决于空域核和值域核的乘积：<br><img src="http://my.csdn.net/uploads/201205/30/1338365512_2777.jpg" alt=""></p>
+<p>在图像的平坦区域，像素值变化很小，对应的像素值域权重接近于1，此时空域权重起主要作用，相当于进行高斯模糊；在图像的边缘区域，像素值变化很大，像素值域权重变大，从而保持了边缘的信息。</p>
+<h3 id="2-实现-1"><a href="#2-实现-1" class="headerlink" title="2. 实现"></a>2. 实现</h3><p>　　上述方法的时间复杂度是O(σd^2)，非常耗时。论文《Fast O(1) bilateral ﬁltering using trigonometric range kernels》，提出了用Raised cosines函数来逼近高斯值域函数，并利用一些特性把值域函数分解为一些列函数的叠加，从而实现函数的加速，而论文” A fast approximation of the bilateral filter using a signal processing approach”则提出了一种使用信号处理的方法，主要是在原有域上添加了信号强度这一维，构成了高维空间，在高维空间中进行下采样，下面的代码是作者团队编写的：<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 双边滤波函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">output</span> = <span class="title">fBilateralFilter_ReviseVer</span><span class="params">( data, edge, edgeMin, edgeMax, sigmaSpatial, sigmaRange,samplingSpatial, samplingRange )</span></span></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'edge'</span>, <span class="string">'var'</span> )</span><br><span class="line">	edge = data;</span><br><span class="line"><span class="keyword">elseif</span> <span class="built_in">isempty</span>( edge )</span><br><span class="line">	edge = data;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">inputHeight = <span class="built_in">size</span>( data, <span class="number">1</span> );</span><br><span class="line">inputWidth = <span class="built_in">size</span>( data, <span class="number">2</span> );</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'edgeMin'</span>, <span class="string">'var'</span> )</span><br><span class="line">	edgeMin = min( edge( : ) );</span><br><span class="line"><span class="comment">% 	warning( 'edgeMin not set!  Defaulting to: %f\n', edgeMin );</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'edgeMax'</span>, <span class="string">'var'</span> )</span><br><span class="line">	edgeMax = max( edge( : ) );</span><br><span class="line"><span class="comment">% 	warning( 'edgeMax not set!  Defaulting to: %f\n', edgeMax );</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">edgeDelta = edgeMax - edgeMin;<span class="comment">% hl- span of range</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% hl- assign scale parameters in both spatial and range domain</span></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'sigmaSpatial'</span>, <span class="string">'var'</span> )</span><br><span class="line">	sigmaSpatial = min( inputWidth, inputHeight ) / <span class="number">16</span>;</span><br><span class="line">	fprintf( <span class="string">'Using default sigmaSpatial of: %f\n'</span>, sigmaSpatial );</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'sigmaRange'</span>, <span class="string">'var'</span> )</span><br><span class="line">	sigmaRange = <span class="number">0.1</span> * edgeDelta;</span><br><span class="line">	fprintf( <span class="string">'Using default sigmaRange of: %f\n'</span>, sigmaRange );</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'samplingSpatial'</span>, <span class="string">'var'</span> )</span><br><span class="line">	samplingSpatial = sigmaSpatial;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ~exist( <span class="string">'samplingRange'</span>, <span class="string">'var'</span> )</span><br><span class="line">	samplingRange = sigmaRange;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">size</span>( data ) ~= <span class="built_in">size</span>( edge )</span><br><span class="line">	error( <span class="string">'data and edge must be of the same size'</span> );</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% parameters</span></span><br><span class="line">derivedSigmaSpatial = sigmaSpatial / samplingSpatial; </span><br><span class="line">derivedSigmaRange = sigmaRange / samplingRange;</span><br><span class="line">paddingXY = <span class="built_in">floor</span>( <span class="number">2</span> * derivedSigmaSpatial ) + <span class="number">1</span>;</span><br><span class="line">paddingZ = <span class="built_in">floor</span>( <span class="number">2</span> * derivedSigmaRange ) + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">% allocate 3D grid</span></span><br><span class="line">downsampledWidth = <span class="built_in">floor</span>( ( inputWidth - <span class="number">1</span> ) / samplingSpatial ) + <span class="number">1</span> + <span class="number">2</span> * paddingXY; <span class="comment">% paddingXY - 控制延拓范围</span></span><br><span class="line">downsampledHeight = <span class="built_in">floor</span>( ( inputHeight - <span class="number">1</span> ) / samplingSpatial ) + <span class="number">1</span> + <span class="number">2</span> * paddingXY;</span><br><span class="line">downsampledDepth = <span class="built_in">floor</span>( edgeDelta / samplingRange ) + <span class="number">1</span> + <span class="number">2</span> * paddingZ;</span><br><span class="line"></span><br><span class="line">gridData = <span class="built_in">zeros</span>( downsampledHeight, downsampledWidth, downsampledDepth );</span><br><span class="line">gridWeights = <span class="built_in">zeros</span>( downsampledHeight, downsampledWidth, downsampledDepth );</span><br><span class="line"></span><br><span class="line"><span class="comment">% compute downsampled indices</span></span><br><span class="line">[ jj, ii ] = <span class="built_in">meshgrid</span>( <span class="number">0</span> : inputWidth - <span class="number">1</span>, <span class="number">0</span> : inputHeight - <span class="number">1</span> ); <span class="comment">% hl- create the coordinats of xy-plane; jj - y coordinates of all pixels, ii - x coordinates of all pixels</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%Compute the downsampled coordinates</span></span><br><span class="line">di = <span class="built_in">round</span>( ii / samplingSpatial ) + paddingXY + <span class="number">1</span>; <span class="comment">% round: Round to nearest integer四舍五入</span></span><br><span class="line">dj = <span class="built_in">round</span>( jj / samplingSpatial ) + paddingXY + <span class="number">1</span>;</span><br><span class="line">dz = <span class="built_in">round</span>( ( edge - edgeMin ) / samplingRange ) + paddingZ + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">% hl - average sampling (box sampling)</span></span><br><span class="line"><span class="keyword">for</span> k = <span class="number">1</span> : <span class="built_in">numel</span>( dz ) <span class="comment">% numel: Number of elements in an array</span></span><br><span class="line">	dataZ = data( k ); <span class="comment">% traverses the image column wise, same as di( k )</span></span><br><span class="line">	<span class="keyword">if</span> ~<span class="built_in">isnan</span>(dataZ),</span><br><span class="line">        dik = di( k ); <span class="comment">%取出坐标</span></span><br><span class="line">        djk = dj( k );</span><br><span class="line">        dzk = dz( k );</span><br><span class="line">        gridData( dik, djk, dzk ) = gridData( dik, djk, dzk ) + dataZ;</span><br><span class="line">        gridWeights( dik, djk, dzk ) = gridWeights( dik, djk, dzk ) + <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% make gaussian kernel</span></span><br><span class="line">kernelWidth = <span class="number">2</span> * derivedSigmaSpatial + <span class="number">1</span>;</span><br><span class="line">kernelHeight = kernelWidth;</span><br><span class="line">kernelDepth = <span class="number">2</span> * derivedSigmaRange + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">halfKernelWidth = <span class="built_in">floor</span>( kernelWidth / <span class="number">2</span> );</span><br><span class="line">halfKernelHeight = <span class="built_in">floor</span>( kernelHeight / <span class="number">2</span> );</span><br><span class="line">halfKernelDepth = <span class="built_in">floor</span>( kernelDepth / <span class="number">2</span> );</span><br><span class="line"></span><br><span class="line">[gridX, gridY, gridZ] = <span class="built_in">meshgrid</span>( <span class="number">0</span> : kernelWidth - <span class="number">1</span>, <span class="number">0</span> : kernelHeight - <span class="number">1</span>, <span class="number">0</span> : kernelDepth - <span class="number">1</span> );</span><br><span class="line">gridX = gridX - halfKernelWidth;</span><br><span class="line">gridY = gridY - halfKernelHeight;</span><br><span class="line">gridZ = gridZ - halfKernelDepth;</span><br><span class="line">gridRSquared = ( gridX .* gridX + gridY .* gridY ) / ( derivedSigmaSpatial * derivedSigmaSpatial ) + ( gridZ .* gridZ ) / ( derivedSigmaRange * derivedSigmaRange );</span><br><span class="line">kernel = <span class="built_in">exp</span>( <span class="number">-0.5</span> * gridRSquared );</span><br><span class="line"></span><br><span class="line"><span class="comment">% convolve</span></span><br><span class="line">blurredGridData = convn( gridData, kernel, <span class="string">'same'</span> );</span><br><span class="line">blurredGridWeights = convn( gridWeights, kernel, <span class="string">'same'</span> );</span><br><span class="line"></span><br><span class="line"><span class="comment">% divide</span></span><br><span class="line">blurredGridWeights( blurredGridWeights == <span class="number">0</span> ) = <span class="number">-2</span>; <span class="comment">% avoid divide by 0, won't read there anyway  </span></span><br><span class="line">normalizedBlurredGrid = blurredGridData ./ blurredGridWeights;</span><br><span class="line">normalizedBlurredGrid( blurredGridWeights &lt; <span class="number">-1</span> ) = <span class="number">0</span>; <span class="comment">% put 0s where it's undefined</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% upsample</span></span><br><span class="line">[ jj, ii ] = <span class="built_in">meshgrid</span>( <span class="number">0</span> : inputWidth - <span class="number">1</span>, <span class="number">0</span> : inputHeight - <span class="number">1</span> ); <span class="comment">% meshgrid does x, then y, so output arguments need to be reversed</span></span><br><span class="line"><span class="comment">% no rounding</span></span><br><span class="line">di = ( ii / samplingSpatial ) + paddingXY + <span class="number">1</span>;</span><br><span class="line">dj = ( jj / samplingSpatial ) + paddingXY + <span class="number">1</span>;</span><br><span class="line">dz = ( edge - edgeMin ) / samplingRange + paddingZ + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">output = interpn( normalizedBlurredGrid, di, dj, dz ); <span class="comment">% N-D data interpolation</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Hessian特征"><a href="#Hessian特征" class="headerlink" title="Hessian特征"></a>Hessian特征</h2><h3 id="1-原理-2"><a href="#1-原理-2" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>　　Hessian矩阵本质是是一个多元函数的二阶偏导数矩阵，描述了函数的局部曲率。关于Hessian矩阵的由来及详细推导证明见参考资料3，这里直接介绍如何得到Hessian矩阵：</p>
+<ul>
+<li>高斯函数</li>
+</ul>
+<p><img src="https://images0.cnblogs.com/blog/340413/201304/11220012-dfd2500ffeab46deb94c565cbd543cd7.png" alt=""></p>
+<ul>
+<li>求二阶偏导</li>
+</ul>
+<p><img src="https://images0.cnblogs.com/blog/340413/201304/11220100-aacb4d9efd5847aea09c0010d246aaa9.png" alt=""></p>
+<ul>
+<li>对原图进行卷积</li>
+</ul>
+<p><img src="https://images0.cnblogs.com/blog/340413/201304/11215427-715349a8c1aa4a138daa0a8333ae86a8.png" alt=""></p>
+<ul>
+<li>构成Hessian矩阵</li>
+</ul>
+<p><img src="https://images0.cnblogs.com/blog/340413/201304/11215631-d4862108572245a783a3225e84036ad0.png" alt=""></p>
+<h3 id="2-实现-2"><a href="#2-实现-2" class="headerlink" title="2. 实现"></a>2. 实现</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 提取Hessian特征值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[hessianValue,Ixx,Ixy,Iyy]</span> = <span class="title">edge_hessian</span><span class="params">(img)</span></span></span><br><span class="line">    [m n]=<span class="built_in">size</span>(img);</span><br><span class="line">    w=<span class="number">4</span>;</span><br><span class="line">    sigma=<span class="number">1.2</span>;</span><br><span class="line">    [x y]=<span class="built_in">meshgrid</span>(-w:w,-w:w);</span><br><span class="line">    <span class="comment">% 高斯函数对应的二阶偏导  </span></span><br><span class="line">    Dxx = <span class="number">1</span>/(<span class="number">-2</span>*<span class="built_in">pi</span>*sigma^<span class="number">4</span>)*(<span class="number">1</span>-x.^<span class="number">2</span>/sigma^<span class="number">2</span>)*<span class="built_in">exp</span>(-(x.^<span class="number">2</span>+x.^<span class="number">2</span>)/(<span class="number">2</span>*sigma^<span class="number">2</span>)); </span><br><span class="line">    Dyy = <span class="number">1</span>/(<span class="number">-2</span>*<span class="built_in">pi</span>*sigma^<span class="number">4</span>)*(<span class="number">1</span>-y.^<span class="number">2</span>/sigma^<span class="number">2</span>)*<span class="built_in">exp</span>(-(x.^<span class="number">2</span>+y.^<span class="number">2</span>)/(<span class="number">2</span>*sigma^<span class="number">2</span>));</span><br><span class="line">    Dxy = <span class="number">1</span>/(<span class="number">2</span>*<span class="built_in">pi</span>*sigma^<span class="number">6</span>)*(x.*y)*<span class="built_in">exp</span>(-(x.^<span class="number">2</span>+y.^<span class="number">2</span>)/(<span class="number">2</span>*sigma^<span class="number">2</span>));</span><br><span class="line"></span><br><span class="line">    Ixx=imfilter(img,Dxx,<span class="string">'replicate'</span>);</span><br><span class="line">    Iyy=imfilter(img,Dyy,<span class="string">'replicate'</span>);</span><br><span class="line">    Ixy=imfilter(img,Dxy,<span class="string">'replicate'</span>);</span><br><span class="line"></span><br><span class="line">    hessianValue=[];</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:m</span><br><span class="line">       <span class="keyword">for</span> <span class="built_in">j</span>=<span class="number">1</span>:n </span><br><span class="line">        hessianValue(<span class="built_in">i</span>,<span class="built_in">j</span>) = Ixx(<span class="built_in">i</span>,<span class="built_in">j</span>)*Iyy(<span class="built_in">i</span>,<span class="built_in">j</span>) - Ixy(<span class="built_in">i</span>,<span class="built_in">j</span>)*Ixy(<span class="built_in">i</span>,<span class="built_in">j</span>);</span><br><span class="line">       <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="Haar特征"><a href="#Haar特征" class="headerlink" title="Haar特征"></a>Haar特征</h2><h3 id="1-原理-3"><a href="#1-原理-3" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>　　Haar特征是一种反映图像的灰度变化的，像素分模块求差值的一种特征。常用于人脸识别中五官划分，例如：脸部的一些特征能由矩形模块差值特征简单的描述，如：眼睛要比脸颊颜色要深，鼻梁两侧比鼻梁颜色要深，嘴巴比周围颜色要深等。但矩形特征只对一些简单的图形结构，如边缘、线段较敏感，所以只能描述在特定方向（水平、垂直、对角）上有明显像素模块梯度变化的图像结构。</p>
+<p>　　它分为三类：<strong>边缘特征、线性特征、中心特征和对角线特征</strong>。<br><img src="http://img.blog.csdn.net/20160816201200204" alt=""></p>
+<p>　　<strong>模板特征值计算</strong>： 黑色矩形像素和 - 白色矩形像素和</p>
+<ul>
+<li><strong>注</strong>：一般通过<strong>积分图</strong>计算Haar特征，这样只需求一次积分图，就可以求出多种Haar特征，节省计算时间</li>
+<li><strong>积分图</strong>：主要思想是将图像从起点开始到各个点所形成的矩形区域像素之和作为一个数组的元素保存在内存中，当要计算某个区域的像素和时可以直接索引数组的元素，不用重新计算这个区域的像素和。示例如下：<br><img src="http://my.csdn.net/uploads/201206/04/1338798979_5003.JPG" alt=""></li>
+</ul>
+<p>上图中，D块的像素和=II(4)+II(1)-II(2)-II(3) II表示积分图</p>
+<h3 id="2-实现-3"><a href="#2-实现-3" class="headerlink" title="2. 实现"></a>2. 实现</h3><p>这里我只实现了Haar特征的一种，其他的同理<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 提取Haar特征（中心为黑四周为白），思路如下：</span></span><br><span class="line"><span class="comment">% white+black = II(i+1,j+1)+II(i-2,j-1)-II(i-2,j+1)-II(i+1,j-2)</span></span><br><span class="line"><span class="comment">% black = img(i,j)</span></span><br><span class="line"><span class="comment">% harr = white-black = white+black-2*black</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[haar,hg,hgx,hgy]</span> = <span class="title">edge_haar_center</span><span class="params">(img)</span></span></span><br><span class="line">    close all;</span><br><span class="line">    II = integralImage(img);<span class="comment">% 求积分图</span></span><br><span class="line">    II = II(<span class="number">2</span>:<span class="keyword">end</span>,<span class="number">2</span>:<span class="keyword">end</span>);</span><br><span class="line">    height = <span class="built_in">size</span>(II,<span class="number">1</span>);</span><br><span class="line">    width = <span class="built_in">size</span>(II,<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    total = II(<span class="number">4</span>:height<span class="number">-1</span>,<span class="number">4</span>:width<span class="number">-1</span>)+II(<span class="number">1</span>:height<span class="number">-4</span>,<span class="number">1</span>:width<span class="number">-4</span>)-II(<span class="number">1</span>:height<span class="number">-4</span>,<span class="number">4</span>:width<span class="number">-1</span>)-II(<span class="number">4</span>:height<span class="number">-1</span>,<span class="number">1</span>:width<span class="number">-4</span>);</span><br><span class="line">    black = img(<span class="number">3</span>:height<span class="number">-2</span>,<span class="number">3</span>:width<span class="number">-2</span>);</span><br><span class="line">    haar = (total - <span class="number">2</span>*black);</span><br><span class="line">    [hgx,hgy] = gradient(haar);</span><br><span class="line">    hg = <span class="built_in">sqrt</span>(hgx.^<span class="number">2</span>+hgy.^<span class="number">2</span>);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://blog.csdn.net/likezhaobin/article/details/6892176" target="_blank" rel="noopener">Canny边缘检测算法原理及其VC实现详解</a></li>
+<li><a href="https://blog.csdn.net/piaoxuezhong/article/details/78302920" target="_blank" rel="noopener">Bilateral Filters（双边滤波算法）原理及实现</a></li>
+<li><a href="https://blog.csdn.net/lwzkiller/article/details/55050275" target="_blank" rel="noopener">Hessian矩阵以及在图像中的应用</a></li>
+<li><a href="https://blog.csdn.net/lanxuecc/article/details/52222369" target="_blank" rel="noopener">机器学习之Haar特征</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="http://okwl1c157.bkt.clouddn.com/wechat-qcode.jpg" alt="Lemon-XQ wechat" style="width: 200px; max-width: 100%;"/>
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+</div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Matlab/" rel="tag"># Matlab</a>
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/11/Android项目开发笔记之身高年龄体重WheelView实现（单栏or双栏）/" rel="next" title="Android项目开发笔记之身高年龄体重WheelView实现（单栏/双栏）">
+                <i class="fa fa-chevron-left"></i> Android项目开发笔记之身高年龄体重WheelView实现（单栏/双栏）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/25/记-2018-9-8-PAT甲级-题解/" rel="prev" title="记 2018.9.8 PAT甲级+题解">
+                记 2018.9.8 PAT甲级+题解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMTg5Ni84NDYw"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="Lemon-XQ" />
+          <p class="site-author-name" itemprop="name">Lemon-XQ</p>
+          <p class="site-description motion-element" itemprop="description">银河街角，时光路口</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Lemon-XQ" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/lemonxq" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-gear"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.imooc.com" title="慕课网" target="_blank">慕课网</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#名词解释"><span class="nav-number">2.</span> <span class="nav-text">名词解释</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-滤波"><span class="nav-number">2.1.</span> <span class="nav-text">1. 滤波</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-直方图"><span class="nav-number">2.2.</span> <span class="nav-text">2. 直方图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-上采样"><span class="nav-number">2.3.</span> <span class="nav-text">3. 上采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-下采样"><span class="nav-number">2.4.</span> <span class="nav-text">4. 下采样</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Canny算子"><span class="nav-number">3.</span> <span class="nav-text">Canny算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理"><span class="nav-number">3.1.</span> <span class="nav-text">1.原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-高斯滤波"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.1 高斯滤波</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-求梯度幅值和梯度方向"><span class="nav-number">3.1.2.</span> <span class="nav-text">1.2 求梯度幅值和梯度方向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-非极大值抑制"><span class="nav-number">3.1.3.</span> <span class="nav-text">1.3 非极大值抑制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-双阈值法闭合边缘"><span class="nav-number">3.1.4.</span> <span class="nav-text">1.4 双阈值法闭合边缘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现"><span class="nav-number">3.2.</span> <span class="nav-text">2.实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-原始图像灰度化"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.1 原始图像灰度化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-调用matlab内置函数"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.2 调用matlab内置函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Roberts、Sobel、Prewitt算子"><span class="nav-number">4.</span> <span class="nav-text">Roberts、Sobel、Prewitt算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Roberts算子"><span class="nav-number">4.1.</span> <span class="nav-text">Roberts算子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sobel算子"><span class="nav-number">4.2.</span> <span class="nav-text">Sobel算子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prewitt算子"><span class="nav-number">4.3.</span> <span class="nav-text">Prewitt算子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双边滤波（Bilateral-Filters）"><span class="nav-number">5.</span> <span class="nav-text">双边滤波（Bilateral Filters）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理-1"><span class="nav-number">5.1.</span> <span class="nav-text">1. 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现-1"><span class="nav-number">5.2.</span> <span class="nav-text">2. 实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hessian特征"><span class="nav-number">6.</span> <span class="nav-text">Hessian特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理-2"><span class="nav-number">6.1.</span> <span class="nav-text">1. 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现-2"><span class="nav-number">6.2.</span> <span class="nav-text">2. 实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Haar特征"><span class="nav-number">7.</span> <span class="nav-text">Haar特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理-3"><span class="nav-number">7.1.</span> <span class="nav-text">1. 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现-3"><span class="nav-number">7.2.</span> <span class="nav-text">2. 实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿
+<div class="copyright" >
+  
+  &copy; 
+   
+	2017 - 
+  
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lemon-XQ
+  
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <script src="https://s4.cnzz.com/z_stat.php?id=1261194950&web_id=1261194950" language="JavaScript"></script>
+  
+  &nbsp;&nbsp;|&nbsp;&nbsp;<span><a href="/sitemap.xml">Google网站地图</a></span>
+  &nbsp;&nbsp;|&nbsp;&nbsp;<span><a href="/baidusitemap.xml">百度网站地图</a></span>
+  &nbsp;&nbsp;|&nbsp;&nbsp;<span>Hosted by <a href="https://pages.coding.me">Coding Pages</a></span>
+  
+  </span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a> 
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位访客
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+        
+
+<div class="busuanzi-count">
+
+  <script async src="/js/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+  <script src="/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("yUseF1bvQMjAV2WF8ebTj9jo-gzGzoHsz", "iWQEqzWeV07HMMiQNxidfuqH");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+
+  
+	<script type="text/javascript" 
+	color="0,0,255" opacity='0.5' zIndex="-1" count="100" 
+	src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+  
+
+</body>
+</html>
